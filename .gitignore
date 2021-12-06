@@ -1,0 +1,7 @@
+contacts/*
+out/*
+*.private.*
+private**
+*.generated.html
+*.pdf
+node_modules

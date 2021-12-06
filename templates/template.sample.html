@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Papyrus;
+      font-size: 14px;
+    }
+
+    @media print {
+      @page {
+        size: 7.25in 5.25in;
+        margin: 0;
+      }
+
+      .guide {
+        display: none;
+      }
+
+    }
+
+    .envelope {
+      width: 7.25in;
+      height: 5.23in; /* more than this causes chrome to insert white page */
+      /*background: red;*/
+      /* border: 1px solid black; */
+      position: relative;
+      page-break-after: always;
+      page-break-inside: avoid;
+
+    }
+
+    .sender {
+      position: absolute;
+      left: 0.25in;
+      top: 0.25in;
+    }
+
+    .recipient {
+      position: absolute;
+      left: 2.65in;
+      top: 2.05in;
+      font-size: 16px;
+    }
+
+    .msg {
+      position: absolute;
+      left: 0.15in;
+      bottom: 0.15in;
+      font-size: 20px;
+      font-weight: bold;
+      color: red;
+      opacity: 0.4;
+    }
+
+    .img1 {
+      display: block;
+      position: absolute;
+      height: 2in;
+      left: 0.5in;
+      top: 1.4in;
+      opacity: 0.4;
+    }
+
+    .img2 {
+      display: block;
+      position: absolute;
+      height: 2in;
+      right: 0.5in;
+      top: 1.4in;
+      opacity: 0.4;
+    }
+
+    .guide {
+      position: absolute;
+      border: 1px solid gray;
+    }
+
+    .barcode {
+      bottom: 0;
+      right: 0;
+      height: 0.75in;
+      width: 4.9in;
+    }
+
+    .stamps {
+      top: 0;
+      right: 0;
+      height: 1.5in;
+      width: 1.5in;
+    }
+  </style>
+</head>
+
+<body>
+  <!--START-->
+  <div class="envelope">
+    <div class="guide barcode"></div>
+    <div class="guide stamps"></div>
+    <img src="img/sample.svg" class="img1" />
+    <img src="img/sample.svg" class="img2" />
+    <div class="msg">
+      Merry Christmas!
+    </div>
+    <div class="sender">
+      My Family<br />
+      Somwhere<br />
+      State, City Zip<br />
+      USA
+    </div>
+    <div class="recipient">
+      {{address}}
+    </div>
+  </div>
+  <!--END-->
+</body>
+
+</html>
