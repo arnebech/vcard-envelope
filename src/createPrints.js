@@ -14,6 +14,7 @@ const createHtml = (addresses, templateName) => {
   const block = template.match(re);
   const cardHtml = block[1];
   const cards = addresses.map((addr) => {
+    addr = addr.slice(2);
     addr = addr.join("\n");
     addr = addr.replace(/\n/g, "<br>");
     return cardHtml.replace("{{address}}", addr);

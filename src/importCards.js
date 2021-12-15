@@ -3,19 +3,40 @@ const fs = require("fs");
 const assert = require("assert");
 const path = require("path");
 
+const cleanupAddrArray = (formattedAdr) => {
+  // return formattedAdr;
+  return formattedAdr.flatMap(line => {
+    line = line.replace('\\,', ',');
+    return line.split('\\n');
+  })
+}
+
 // Note: very limited address parsing here, this will need to be expanded for more cases
 const parseAddressProp = (adrProp) => {
   const fields = adrProp.toJSON();
   const addressArray = fields[3];
-  const [poBox, extAddress, street, city, state, zip, country] = addressArray;
+  let [poBox, extAddress, street, city, state, zip, country] = addressArray;
+  if (!country) {
+    country = "USA";
+  }
+
   assert(!poBox, "not sure how to format po box");
   assert(!extAddress, "not sure how to format ext address");
-  assert(
-    country === "Norway" || country === "Denmark",
-    "Currently only formats Norwegian and Danish addresses"
-  );
-  const formattedAdr = [street, `${zip} ${city}`, country];
-  return formattedAdr;
+  let formattedAdr;
+  if (country === "Norway" || country === "Denmark") {
+    formattedAdr = [street, `${zip} ${city}`, country];
+  } else if (
+    country === "USA" ||
+    country === "United States" ||
+    country === "United States of America"
+  ) {
+    formattedAdr = [street, `${city}, ${state} ${zip}`];
+  } else if (country === 'Türkiye') {
+    formattedAdr = [street, `${zip} ${state}`, `${city} ${country}`];
+  } else {
+    throw new Error(`Not sure how to format addresses to country ${country}`);
+  }
+  return cleanupAddrArray(formattedAdr);
 };
 
 const importCardsFromFile = (filePath) => {
@@ -30,7 +51,8 @@ const importCardsFromFile = (filePath) => {
     const name = card.get("fn").valueOf();
 
     adrArray.forEach((adrItem) => {
-      const fullAddress = [name, ...parseAddressProp(adrItem)]; //`${name}\n${parseAddressProp(adrItem)}`;
+
+      const fullAddress = [name, '---', `${name.split(' ')[1]} Family`, ...parseAddressProp(adrItem)]; //`${name}\n${parseAddressProp(adrItem)}`;
       addresses.push(fullAddress);
     });
   });
